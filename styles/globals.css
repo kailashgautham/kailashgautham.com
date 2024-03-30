@@ -20,11 +20,16 @@ img {
   height: auto;
 }
 
+p {
+  font-size: 1rem;
+}
+
 h1,
 h2,
 p,
 ul {
   margin: 0;
+  padding: 0;
 }
 
 ul {
