@@ -1,13 +1,12 @@
-import utilStyles from '../styles/utils.module.css';
-
-const NavItem = ({ text, href, active, setUrl }) => {
+const NavItem = ({ text, href, setUrl }) => {
   return (
-    <span className={utilStyles.spanItem}
+    <a
+      style={{cursor: "pointer"}}
       onClick={() => {
         setUrl(href);
       }}>
       {text}
-    </span>
+    </a>
   );
 };
 

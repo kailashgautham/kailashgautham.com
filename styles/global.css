@@ -1,11 +1,15 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  line-height: 1.6;
-  font-size: 18px;
+:root {
+  /* Font sizes */
+  --font-size-lg: 1.5rem; /* Large */
+  --font-size-md: 1.2rem; /* Medium */
+  --font-size-sm: 1rem; /* Small */
+
+  /* Spacing */
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+
+  /* Breakpoints */
+  --breakpoint-md: 48em; /* 768px equivalent */
 }
 
 * {
@@ -22,8 +26,91 @@ a {
   
 }
 
-  img {
-   max-width: 100%;
-   display: block;
-  
+/* Base styles */
+body, h2, h3, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
+  text-align: justify;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+  Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: var(--font-size-sm);
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+  Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.heading2Xl {
+  font-size: var(--font-size-lg);
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  margin: var(--spacing-md) 0;
+}
+
+.headingXl, .headingLg, .headingMd {
+  font-size: var(--font-size-md);
+  line-height: 1.3;
+  margin: var(--spacing-md) 0;
+}
+
+.pageLayout {
+  display: flex;
+  flex-direction: column; /* Default mobile-first layout */
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .pageLayout {
+    grid-template-columns: 1fr; /* Sidebar takes 1 fraction, content takes 3 fractions */
+  }
+}
+
+@media (min-width: 48em) { /* Adjust breakpoint as needed */
+  .pageLayout {
+    flex-direction: row; /* Switch to horizontal layout on larger screens */
+  }
+}
+
+.navbarContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-md);
+  border-right: 2px solid #ccc;
+  border-image: linear-gradient(
+    to bottom,
+    rgba(204, 204, 204, 0.5) 0%, /* Change the color and opacity as needed */
+    rgba(0, 0, 0, 0) 100%
+  ) 1 stretch;
+}
+
+.contentContainer {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.borderCircle {
+  border-radius: 50%;
+}
+
+.pageLayout {
+  display: flex;
+  flex-direction: row;
+}
+
+.no-border {
+  border-right: none;
 }
