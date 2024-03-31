@@ -28,7 +28,6 @@ a {
 
 /* Base styles */
 body, h2, h3, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
-  text-align: justify;
   margin: 0;
   padding: 0;
   line-height: 1.6;
