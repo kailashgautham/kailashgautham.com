@@ -13,11 +13,13 @@ import Image from 'next/image';
 import ExperienceParent from '../components/experienceparent';
 import ProjectParent from '../components/projectparent';
 import Contact from '../components/contact';
+import PortfolioParent from '../components/portfolioparent';
 
 const MENU_LIST = [
   { text: "Home", href: "/" },
   { text: "Work Experience", href: "/work" },
   { text: "Projects", href: "/projects" },
+  { text: "Portfolio", href: "/portfolio" },
   { text: "Contact", href: "/contact" },
 ];
 
@@ -80,6 +82,7 @@ export default function MainPage() {
           {url === "/" && <Home  setUrl={setUrl}/>}
           {url === "/work" && <ExperienceParent />}
           {url === "/projects" && <ProjectParent />}
+          {url === "/portfolio" && <PortfolioParent />}
           {url === "/contact" && <Contact />}
         </Grid>
       </Grid>
