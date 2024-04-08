@@ -7,7 +7,7 @@ const Portfolio = ({ portfolio }) => {
         <div>
             <h2>{title}</h2>
             <p>{description}</p>
-            <a href={link}>View</a>
+            <a target="_blank" href={link}>View</a>
         </div>
     );
 };
