@@ -35,7 +35,7 @@ const EXPERIENCE_ITEMS = [
     role: "Frontend Developer and Research Intern",
     duration: "August 2022 - April 2023",
     description: "Developed the NUS FinTech Lab website, a platform that showcases the lab's research projects and publications. Conducted research on upcoming fintech technologies.",
-    technologies: "HTML, CSS, JavaScript"
+    technologies: "HTML, CSS, Wordpress"
   },
   {
     companyName: "Netcon Technologies",
