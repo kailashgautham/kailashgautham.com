@@ -51,8 +51,8 @@ export default function MainPage() {
             priority
             src="/profile.jpg"
             className="borderCircle"
-            height={100}
-            width={100}
+            height={200}
+            width={200}
             alt=""
           />
           <Link href={"/"} onClick={() => setUrl("/")}>
