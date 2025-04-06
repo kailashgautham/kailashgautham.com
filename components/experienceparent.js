@@ -5,7 +5,7 @@ const EXPERIENCE_ITEMS = [
   {
     companyName: "Squarepoint Capital",
     role: "Software Engineer Intern",
-    duration: "May 2025 - August 2025",
+    duration: "August 2025 - December 2025",
     description: "",
     technologies: "C++"
   },
