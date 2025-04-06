@@ -8,6 +8,7 @@ export default function Layout({ children, home }) {
     return (
         <div className={styles.container}>
             <Head>
+                <title>{siteTitle}</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta
                     property="og:image"

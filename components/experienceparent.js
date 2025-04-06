@@ -3,6 +3,13 @@ import Experience from './experience';
 
 const EXPERIENCE_ITEMS = [
   {
+    companyName: "Squarepoint Capital",
+    role: "Software Engineer Intern",
+    duration: "May 2025 - August 2025",
+    description: "",
+    technologies: "C++"
+  },
+  {
     companyName: "Goldman Sachs",
     role: "Software Engineer Intern",
     duration: "May 2025 - August 2025",
@@ -10,10 +17,10 @@ const EXPERIENCE_ITEMS = [
     technologies: "Java, Spring, PostgreSQL, Apache Flink"
   },
   {
-    companyName: "AI Singapore",
+    companyName: "AI Centre for Education Technologies",
     role: "Software Engineer Intern",
     duration: "May 2024 - August 2024",
-    description: "Worked on AI Singapore's Koditsu project, a high-performance code assessment platform that can support over 800 concurrent users.",
+    description: "Worked on AICET's Koditsu project, a high-performance code assessment platform that can support over 800 concurrent users.",
     technologies: "MongoDB, React.js, Nest.js"
   },
   {
