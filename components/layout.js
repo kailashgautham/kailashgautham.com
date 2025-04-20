@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import styles from './layout.module.css';
-import Link from 'next/link';
 
 export const siteTitle = 'Kailash Gautham';
 
@@ -18,6 +17,9 @@ export default function Layout({ children, home }) {
                 />
                 <meta name="og:title" content={siteTitle} />
                 <meta name="twitter:card" content="summary_large_image" />
+                <meta name="description" content="Portfolio of Kailash Gautham – software engineer, developer, and tech enthusiast." />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+
             </Head>
             <header className={styles.header}>
             </header>
