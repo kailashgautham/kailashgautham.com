@@ -14,7 +14,7 @@ import ExperienceParent from '../components/experienceparent';
 import ProjectParent from '../components/projectparent';
 import Contact from '../components/contact';
 import PortfolioParent from '../components/portfolioparent';
-
+import Layout from '../components/layout';
 const MENU_LIST = [
   { text: "Home", href: "/" },
   { text: "Work Experience", href: "/work" },

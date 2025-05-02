@@ -5,7 +5,7 @@ export const siteTitle = 'Kailash Gautham';
 
 export default function Layout({ children, home }) {
     return (
-        <div className={styles.container}>
+        <div>
             <Head>
                 <title>{siteTitle}</title>
                 <link rel="icon" href="/favicon.ico" />
