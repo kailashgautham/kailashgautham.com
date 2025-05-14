@@ -1,4 +1,3 @@
-import React from 'react';
 import Portfolio from './portfolio';
 
 const PORTFOLIO_ITEMS = [

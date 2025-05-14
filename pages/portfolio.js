@@ -5,12 +5,18 @@ import {
   useMediaQuery,
   useTheme
 } from "@mui/material";
-import Home from '../components/home';
-import Sidenav from "../components/sidenav";
+import PortfolioParent from '../components/portfolioparent';
 import Layout from '../components/layout';
-
-
-export default function MainPage() {
+import Sidenav from "../components/sidenav";
+const MENU_LIST = [
+  { text: "Home", href: "/" },
+  { text: "Work Experience", href: "/work" },
+  { text: "Projects", href: "/projects" },
+  { text: "Portfolio", href: "/portfolio" },
+  { text: "Contact", href: "/contact" },
+];
+  
+const WorkPage = ({ setUrl }) => {
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -24,7 +30,6 @@ export default function MainPage() {
             alignItems="start"
             spacing={6}
             display="flex"
-            justifyContent="start"
             flexDirection={isSmallScreen ? "column" : "row"}
             sx={{
               paddingTop: { xs: "50px", md: "100px" },
@@ -33,7 +38,7 @@ export default function MainPage() {
           >
             <Sidenav />
             <Grid item xs={12} sm={8} order={isSmallScreen ? 2 : 1}>
-              <Home />
+              <PortfolioParent />
             </Grid>
           </Grid>
         </Container>
@@ -41,3 +46,5 @@ export default function MainPage() {
     </Layout>
   );
 }
+
+export default WorkPage;

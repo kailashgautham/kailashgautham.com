@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Experience = ({ experience }) => {
     const { companyName, role, duration, description, technologies } = experience;
 

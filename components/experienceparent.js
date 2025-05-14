@@ -1,4 +1,3 @@
-import React from 'react';
 import Experience from './experience';
 
 const EXPERIENCE_ITEMS = [
@@ -17,7 +16,7 @@ const EXPERIENCE_ITEMS = [
     technologies: "Java, Spring, PostgreSQL, Apache Flink"
   },
   {
-    companyName: "AI Centre for Education Technologies",
+    companyName: "AI Centre for Education Technologies (AICET)",
     role: "Software Engineer Intern",
     duration: "May 2024 - August 2024",
     description: "Worked on AICET's Koditsu project, a high-performance code assessment platform that can support over 800 concurrent users.",
@@ -55,8 +54,11 @@ const EXPERIENCE_ITEMS = [
 
 const ExperienceParent = () => {
   return (
-    <div>
-      <h1>Work Experience</h1><br></br>
+    <div style={{ maxWidth: "100%", overflow: "hidden" }}>
+      <h1 style={{
+        marginTop: 0,
+        marginBottom: "1rem"
+      }}>Work Experience</h1>
       {EXPERIENCE_ITEMS.map((experience) => (
         <div style={{ paddingBottom: "1.5rem" }}>
           <Experience
