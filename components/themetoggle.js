@@ -1,18 +1,18 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import { DarkMode, LightMode } from '@mui/icons-material';
-import { Grid, Button, Slider, Switch } from '@mui/material';
+import { Grid, Switch } from '@mui/material';
 export default function ThemeToggle() {
+
     const [theme, setTheme] = useState('light');
+    const [checked, setChecked] = useState(true);
 
     useEffect(() => {
         const storedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const defaultTheme = storedTheme || (prefersDark ? 'dark' : 'light');
-
         document.documentElement.setAttribute('data-theme', defaultTheme);
         setTheme(defaultTheme);
+        setChecked(defaultTheme === 'light' ? true : false);
     }, []);
 
     const toggleTheme = () => {
@@ -20,6 +20,7 @@ export default function ThemeToggle() {
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         setTheme(newTheme);
+        setChecked(!checked);
     };
 
     return (
@@ -30,7 +31,7 @@ export default function ThemeToggle() {
                 display="flex"
             >
                 <DarkMode />
-                <Switch onClick={toggleTheme}/>
+                <Switch checked={checked} onClick={toggleTheme}/>
                 <LightMode />
             </Grid>
         </div>
