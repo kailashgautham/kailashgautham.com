@@ -5,7 +5,7 @@ const Portfolio = ({ portfolio }) => {
 
     return (
         <div>
-            <h2>{title}</h2>
+            <h3>{title}</h3>
             <p>{description}</p>
             <a target="_blank" href={link}>View</a>
         </div>

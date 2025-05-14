@@ -16,6 +16,13 @@ const EXPERIENCE_ITEMS = [
     technologies: "Java, Spring, PostgreSQL, Apache Flink"
   },
   {
+    companyName: "National University of Singapore",
+    role: "Teaching Assistant",
+    duration: "March 2025 - April 2025",
+    description: "Assisted in teaching CS2105 Introduction to Computer Networks.",
+    technologies: "Python"
+  },
+  {
     companyName: "AI Centre for Education Technologies (AICET)",
     role: "Software Engineer Intern",
     duration: "May 2024 - August 2024",
