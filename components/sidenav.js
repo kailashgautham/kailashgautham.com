@@ -5,6 +5,7 @@ import {
 } from "@mui/material";
 import Link from 'next/link';
 import Image from 'next/image';
+import ThemeToggle from "./themetoggle";
 
 const MENU_LIST = [
     { text: "Home", href: "/" },
@@ -20,7 +21,7 @@ const Sidenav = () => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
-        <Grid item xs={12} sm={4} className={isSmallScreen ? "no-border" : "navbarContainer"} >
+        <Grid size={{ xs: 12, sm: 4 }} className={isSmallScreen ? "no-border" : "navbarContainer"} >
             <Image
                 priority
                 src="/profile.jpg"
@@ -29,11 +30,14 @@ const Sidenav = () => {
                 width={200}
                 alt=""
             />
-            <Link href={"/"} >
-                <p className="logo">Kailash Gautham</p>
-            </Link>
-            <p>Welcome to my website :)</p>
+            <div>
+                <Link href={"/"} >
+                    Kailash Gautham
+                </Link>
+            </div>
+            Welcome to my website :)
             <br></br>
+            <ThemeToggle />
             <nav>
                 <div>
                     <div></div>

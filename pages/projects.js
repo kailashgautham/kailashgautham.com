@@ -40,7 +40,7 @@ const WorkPage = ({ setUrl }) => {
             }}
           >
             <Sidenav />
-            <Grid item xs={12} sm={8} order={isSmallScreen ? 2 : 1}>
+            <Grid size={{ xs: 12, sm: 8 }} order={isSmallScreen ? 2 : 1}>
               <ProjectParent />
             </Grid>
           </Grid>
