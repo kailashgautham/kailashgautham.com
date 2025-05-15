@@ -21,16 +21,16 @@ const Sidenav = () => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
-        <Grid size={{ xs: 12, sm: 4 }} className={isSmallScreen ? "no-border" : "navbarContainer"} >
+        <Grid size={{ xs: 12, sm: 4 }} className={isSmallScreen ? "no-border" : "navbarContainer"}>
             <Image
                 priority
                 src="/profile.jpg"
                 className="borderCircle"
-                height={200}
-                width={200}
+                height={isSmallScreen ? 80 : 200}
+                width={isSmallScreen ? 80 : 200} 
                 alt=""
             />
-            <div>
+            <div style={{ paddingTop: isSmallScreen ? 16 : 0 }}>
                 <Link href={"/"} >
                     Kailash Gautham
                 </Link>

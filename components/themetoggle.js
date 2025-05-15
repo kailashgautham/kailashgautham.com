@@ -1,39 +1,41 @@
 import { useEffect, useState } from 'react';
 import { DarkMode, LightMode } from '@mui/icons-material';
 import { Grid, Switch } from '@mui/material';
-export default function ThemeToggle() {
 
-    const [theme, setTheme] = useState('light');
-    const [checked, setChecked] = useState(true);
+export default function ThemeToggle() {
+    const [theme, setTheme] = useState(null); // initially null
+    const [checked, setChecked] = useState(null); // initially null
 
     useEffect(() => {
         const storedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const defaultTheme = storedTheme || (prefersDark ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', defaultTheme);
-        setTheme(defaultTheme);
-        setChecked(defaultTheme === 'light' ? true : false);
+
+        // fallback if stored theme is missing or unreliable
+        const prefersDark = window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
+
+        setTheme(initialTheme);
+        setChecked(initialTheme === 'light');
+        document.documentElement.setAttribute('data-theme', initialTheme);
     }, []);
 
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
         setTheme(newTheme);
-        setChecked(!checked);
+        setChecked(newTheme === 'light');
+        localStorage.setItem('theme', newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
     };
 
+    // Avoid rendering until state is initialized (prevents flicker)
+    if (theme === null || checked === null) return null;
+
     return (
-        <div>
-            <Grid
-                container
-                alignItems="center"
-                display="flex"
-            >
-                <DarkMode />
-                <Switch checked={checked} onClick={toggleTheme}/>
-                <LightMode />
-            </Grid>
-        </div>
+        <Grid container alignItems="center">
+            <DarkMode />
+            <Switch checked={checked} onChange={toggleTheme} />
+            <LightMode />
+        </Grid>
     );
 }
