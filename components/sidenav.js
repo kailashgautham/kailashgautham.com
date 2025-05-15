@@ -9,9 +9,10 @@ import ThemeToggle from "./themetoggle";
 
 const MENU_LIST = [
     { text: "Home", href: "/" },
-    { text: "Work Experience", href: "/work" },
+    { text: "Experience", href: "/work" },
     { text: "Projects", href: "/projects" },
     { text: "Portfolio", href: "/portfolio" },
+    { text: "Resume", href: "/resume" },
     { text: "Contact", href: "/contact" },
 ];
 

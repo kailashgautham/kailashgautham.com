@@ -125,6 +125,22 @@ img {
   }
 }
 
+.MuiTypography-root {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  line-height: inherit !important;
+}
+
+.MuiLink-root {
+  color: #0070f3 !important;  /* your global a color */
+  text-decoration: none !important;
+}
+
+.MuiLink-root:hover {
+  text-decoration: underline !important;
+}
+
 .navbarContainer {
   display: flex;
   flex-direction: column;

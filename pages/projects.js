@@ -5,21 +5,11 @@ import {
   useMediaQuery,
   useTheme
 } from "@mui/material";
-import Link from 'next/link';
-import Image from 'next/image';
-import ExperienceParent from '../components/experienceparent';
 import Layout from '../components/layout';
 import Sidenav from "../components/sidenav";
 import ProjectParent from "../components/projectparent";
-const MENU_LIST = [
-  { text: "Home", href: "/" },
-  { text: "Work Experience", href: "/work" },
-  { text: "Projects", href: "/projects" },
-  { text: "Portfolio", href: "/portfolio" },
-  { text: "Contact", href: "/contact" },
-];
   
-const WorkPage = ({ setUrl }) => {
+const WorkPage = () => {
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));

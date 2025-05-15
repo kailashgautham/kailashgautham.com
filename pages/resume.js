@@ -5,11 +5,12 @@ import {
   useMediaQuery,
   useTheme
 } from "@mui/material";
+import ExperienceParent from '../components/experienceparent';
 import Layout from '../components/layout';
 import Sidenav from "../components/sidenav";
-import Contact from "../components/contact";
+import Resume from "../components/resume";
   
-const WorkPage = () => {
+const ResumePage = () => {
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -31,7 +32,7 @@ const WorkPage = () => {
           >
             <Sidenav />
             <Grid size={{ xs: 12, sm: 8 }} order={isSmallScreen ? 2 : 1}>
-              <Contact />
+              <Resume />
             </Grid>
           </Grid>
         </Container>
@@ -40,4 +41,4 @@ const WorkPage = () => {
   );
 }
 
-export default WorkPage;
+export default ResumePage;

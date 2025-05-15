@@ -8,15 +8,8 @@ import {
 import PortfolioParent from '../components/portfolioparent';
 import Layout from '../components/layout';
 import Sidenav from "../components/sidenav";
-const MENU_LIST = [
-  { text: "Home", href: "/" },
-  { text: "Work Experience", href: "/work" },
-  { text: "Projects", href: "/projects" },
-  { text: "Portfolio", href: "/portfolio" },
-  { text: "Contact", href: "/contact" },
-];
   
-const WorkPage = ({ setUrl }) => {
+const WorkPage = () => {
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
