@@ -2,10 +2,10 @@ import Project from './project';
 
 const PROJECT_ITEMS = [
   {
-    title: "Pixel Empire - A 2D Game Engine",
-    description: "Developed a 2D game engine.",
+    title: "Lox Interpreter",
+    description: "Developed a language interpreter for the Lox language",
     technologies: "C++",
-    link: "https://github.com/kailashgautham/pixel-empire"
+    link: "https://github.com/kailashgautham/lox-interpreter"
   },
   {
     title: "KaithanOS - Operating System in C",
