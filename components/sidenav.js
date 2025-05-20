@@ -28,8 +28,15 @@ const Sidenav = () => {
                 src="/profile.jpg"
                 className="borderCircle"
                 height={isSmallScreen ? 80 : 200}
-                width={isSmallScreen ? 80 : 200} 
+                width={isSmallScreen ? 80 : 200}
                 alt=""
+                style={{
+                    height: 'auto',
+                    width: '100%',
+                    maxWidth: isSmallScreen ? '80px' : '200px',
+                    objectFit: 'cover',
+                    borderRadius: '50%' // if you want circular image
+                }}
             />
             <div style={{ paddingTop: isSmallScreen ? 16 : 0 }}>
                 <Link href={"/"} >

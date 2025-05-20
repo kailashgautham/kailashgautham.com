@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import '../styles/global.css';
 
 function App({ Component, pageProps }) {
