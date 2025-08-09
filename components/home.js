@@ -27,8 +27,8 @@ const Home = () => {
                         I am also an avid reader and enjoy reading books on technology and science fiction. And just like every other CS major, I kickstart my day with a hot cup of coffee!
                     </Typography>
                     <Typography>
-                        This summer, I will be interning at Goldman Sachs as a Software Engineer Intern.
-                        I will then intern with Squarepoint Capital in the fall.
+                        This past summer, I interned at Goldman Sachs as a Software Engineer Intern under the Margin Engineering team.
+                        I am currently interning at Squarepoint Capital as a C++ Software Engineer Intern under the Risk PnL team.
                     </Typography>
                     <Typography>
                         If you're interested in learning more about my work or discussing potential opportunities, please <Link href="/contact">contact me here</Link>.

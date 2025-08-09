@@ -5,15 +5,15 @@ const EXPERIENCE_ITEMS = [
     companyName: "Squarepoint Capital",
     role: "Software Engineer Intern",
     duration: "August 2025 - December 2025",
-    description: "",
+    description: "Working under the Risk PnL team.",
     technologies: "C++"
   },
   {
     companyName: "Goldman Sachs",
     role: "Software Engineer Intern",
     duration: "May 2025 - August 2025",
-    description: "Working under the Margin Technology team (Post-Trade Transactions).",
-    technologies: "Java, Spring, PostgreSQL, Apache Flink"
+    description: "Worked under the Margin Engineering team to develop a real-time metrics platform to analyse margin trends.",
+    technologies: "Java, Spring"
   },
   {
     companyName: "National University of Singapore",
