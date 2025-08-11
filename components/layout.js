@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from './layout.module.css';
+import { Analytics } from '@vercel/analytics/next';
 
 export const siteTitle = 'Kailash Gautham';
 
@@ -24,6 +25,7 @@ export default function Layout({ children, home }) {
             <header className={styles.header}>
             </header>
             <main>{children}</main>
+            <Analytics />
         </div>
     );
 }
