@@ -20,12 +20,6 @@ const PROJECT_ITEMS = [
     link: "https://github.com/kailashgautham/concurrent-systems"
   },
   {
-    title: "Kepler - The Trading Platform of the Future",
-    description: "Developed a trading platform for clients to easily post margin payments and make trades.",
-    technologies: "Java, PostgreSQL, React, Apache Flink",
-    link: "https://github.com/kailashgautham/kepler"
-  },
-  {
     title: "InterviewAce - Interview Preparation Platform",
     description: "Built a platform that provides interview preparation resources such as coding questions and mock interviews.", 
     technologies: "Python, Flask, React",
