@@ -11,11 +11,11 @@ const Home = () => {
                 <Stack style={{ textAlign: "justify" }} spacing={3}>
                     <Typography >
                         Hi, I’m Kailash, a final-year undergraduate computer science student at the National University of Singapore, expecting to graduate by May 2026.
-                        While I am interested in all things computer science, my primary areas of interest are <b>back-end development</b> and <b>development in C++</b>.
+                        While I am broadly interested in computer science, my primary focus is on <b>C++</b> and <b>low-level, high-performance systems development</b>.
                         I am also extremely passionate about <b>operating systems</b> and <b>parallel computing</b>, which are my areas of focus at NUS.
                     </Typography>
                     <Typography>
-                        In the past, I have completed a number of software engineering internships at various companies. Apart from internships, I have worked on many technically challenging projects, including <a target="_blank" href="https://github.com/kaithanos/kaithanos">KaithanOS</a> (an operating system built from scratch) and <a target="_blank" href="https://github.com/janniver/interviewace">InterviewAce</a> (your very own AI technical interviewer), which I am eager to share. This website is a comprehensive portal about me, my projects, and my interests.
+                        In the past, I have completed a number of software engineering internships at various companies. Apart from internships, I have worked on many technically challenging projects, including <a target="_blank" href="https://github.com/kaithanos/kaithanos">KaithanOS</a> (an operating system built from scratch) and <a target="_blank" href="https://github.com/janniver/interviewace">InterviewAce</a> (your very own AI technical interviewer). This website is a comprehensive portal about me, my projects, and my interests.
                     </Typography>
                     <Typography>
                         In my free time, I like to dabble in video game development and have created a number of games,
@@ -24,11 +24,15 @@ const Home = () => {
                         </a> and <a target="_blank" href="https://kailash331215.itch.io/tombgame">
                             Tomb of the Lost
                         </a>.
-                        I am also an avid reader and enjoy reading books on technology and science fiction. And just like every other CS major, I kickstart my day with a hot cup of coffee!
+                        I am also an avid reader and enjoy reading books on technology and science fiction. I also drink too much coffee for my own good.
                     </Typography>
                     <Typography>
-                        This past summer, I interned at Goldman Sachs as a Software Engineer Intern under the Margin Engineering team.
-                        I am currently interning at Squarepoint Capital as a C++ Software Engineer Intern under the Risk PnL team.
+                        This past summer, I interned at Goldman Sachs as a Software Engineer on the Margin Engineering team, 
+                        where I built a cool trend analysis platform that helps stakeholders understand the scale of margin operations.
+                    </Typography>
+                    <Typography>
+                        I am currently interning at Squarepoint Capital as a C++ Software Engineer Intern under the Risk PnL team. 
+                        Among other things, I am currently working on auto-marking logic in C++ to handle missing prices more efficiently and ensure accurate PnL reporting.
                     </Typography>
                     <Typography>
                         If you're interested in learning more about my work or discussing potential opportunities, please <Link href="/contact">contact me here</Link>.

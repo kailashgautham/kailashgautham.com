@@ -3,9 +3,9 @@ import Experience from './experience';
 const EXPERIENCE_ITEMS = [
   {
     companyName: "Squarepoint Capital",
-    role: "Software Engineer Intern",
+    role: "C++ Software Engineer Intern",
     duration: "August 2025 - December 2025",
-    description: "Working under the Risk PnL team.",
+    description: "Working under the Risk PnL team. Finally using C++. Loving the challenge.",
     technologies: "C++"
   },
   {
@@ -13,46 +13,46 @@ const EXPERIENCE_ITEMS = [
     role: "Software Engineer Intern",
     duration: "May 2025 - August 2025",
     description: "Worked under the Margin Engineering team to develop a real-time metrics platform to analyse margin trends.",
-    technologies: "Java, Spring"
+    technologies: "Java"
   },
   {
     companyName: "National University of Singapore",
     role: "Teaching Assistant",
     duration: "March 2025 - April 2025",
     description: "Assisted in teaching CS2105 Introduction to Computer Networks.",
-    technologies: "Python"
+    technologies: "Python, C++, Java"
   },
   {
     companyName: "AI Centre for Education Technologies (AICET)",
     role: "Software Engineer Intern",
     duration: "May 2024 - August 2024",
     description: "Worked on AICET's Koditsu project, a high-performance code assessment platform that can support over 800 concurrent users.",
-    technologies: "MongoDB, React.js, Nest.js"
+    technologies: "TypeScript"
   },
   {
     companyName: "Triple One Global",
     role: "Software Engineer Intern",
     duration: "May 2023 - August 2023",
     description: "Engineered Monster Group's new website, a platform that connects job seekers with employers. Also developed a content management system for non-technical users to manage the website's content.",
-    technologies: "Next.js, TypeScript, Prisma, PostgreSQL"
+    technologies: "TypeScript"
   },
   {
     companyName: "National University of Singapore",
     role: "Teaching Assistant",
     duration: "January 2023 - April 2023",
     description: "Assisted in teaching CS2030S Programming Methodology II, a module that covers advanced programming concepts such as object-oriented programming and functional programming.",
-    technologies: "Vim, Java, Git"
+    technologies: "Vim, Java"
   },
   {
     companyName: "NUS FinTech Lab",
-    role: "Frontend Developer and Research Intern",
+    role: "Software Engineer Intern",
     duration: "August 2022 - April 2023",
     description: "Developed the NUS FinTech Lab website, a platform that showcases the lab's research projects and publications. Conducted research on upcoming fintech technologies.",
     technologies: "HTML, CSS, Wordpress"
   },
   {
     companyName: "Netcon Technologies",
-    role: "Cybersecurity Intern",
+    role: "Cyber Security Engineer Intern",
     duration: "March 2019 - April 2019",
     description: "Assisted in conducting penetration tests on clients' networks and systems.",
     technologies: "Kali Linux, Metasploit, Wireshark, Nmap"
