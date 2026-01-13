@@ -27,12 +27,15 @@ const Home = () => {
                         I am also an avid reader and enjoy reading books on technology and science fiction. I also drink too much coffee for my own good.
                     </Typography>
                     <Typography>
-                        This past summer, I interned at Goldman Sachs as a Software Engineer on the Margin Engineering team, 
+                        This past summer, I interned at <b>Goldman Sachs</b> as a <b>Software Engineer</b> on the <b>Margin Engineering</b> team,
                         where I built a cool trend analysis platform that helps stakeholders understand the scale of margin operations.
                     </Typography>
                     <Typography>
-                        I am currently interning at Squarepoint Capital as a C++ Software Engineer Intern under the Risk PnL team. 
-                        Among other things, I am currently working on auto-marking logic in C++ to handle missing prices more efficiently and ensure accurate PnL reporting.
+                        I also interned at <b>Squarepoint Capital</b> this fall as a <b>C++ Software Engineer</b> under the <b>Risk PnL</b> team. 
+                        Among other things, I worked on auto-marking logic in C++ to handle missing prices more efficiently and ensure accurate PnL reporting.
+                    </Typography>
+                    <Typography>
+                        I have received return offers from all of my previous internships, and I'm excited to share that I'll be returning to <b>Squarepoint Capital</b> this July as a <b>Graduate C++ Software Engineer</b>.
                     </Typography>
                     <Typography>
                         If you're interested in learning more about my work or discussing potential opportunities, please <Link href="/contact">contact me here</Link>.

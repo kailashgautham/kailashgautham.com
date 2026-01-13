@@ -4,8 +4,8 @@ const EXPERIENCE_ITEMS = [
   {
     companyName: "Squarepoint Capital",
     role: "C++ Software Engineer Intern",
-    duration: "August 2025 - December 2025",
-    description: "Working under the Risk PnL team. Finally using C++. Loving the challenge.",
+    duration: "August 2025 - January 2026",
+    description: "Worked under the Risk PnL team. Finally used C++. Loved the challenge.",
     technologies: "C++"
   },
   {
