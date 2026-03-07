@@ -180,7 +180,7 @@ const getDailyQuote = () => {
 };
 
 const STORAGE_KEY = "hft-prep-entries";
-const dateKey = d => d.toISOString().split("T")[0];
+const dateKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const today = () => new Date();
 const parseDate = s => { const [y,m,d] = s.split("-"); return new Date(y, m-1, d); };
 const dayNames = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
