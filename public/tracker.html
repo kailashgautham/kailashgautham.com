@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HFT Prep Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0a0a; color:#e0e0e0; font-family:'JetBrains Mono','SF Mono','Fira Code',monospace; }
+  button { font-family:inherit; cursor:pointer; }
+  textarea { font-family:inherit; }
+  ::selection { background:#3b82f644; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:#0a0a0a; }
+  ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const CREDENTIAL_HASH = "8781629218e92db8cd5029c09d5d17586fa1343a7974f11f9fd30f01e90cd9a8";
+const SESSION_KEY = "hft-prep-session";
+const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+async function hashCredentials(user, pass) {
+  const data = new TextEncoder().encode(user + ":" + pass);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf)).map(x => x.toString(16).padStart(2, "0")).join("");
+}
+
+function getSession() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SESSION_KEY));
+    if (s && s.expires > Date.now()) return true;
+  } catch {}
+  return false;
+}
+
+function setSession() {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ expires: Date.now() + SESSION_DURATION_MS }));
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+// ─── SYNC HELPERS ──────────────────────────────────────────────
+let _authHeader = null;
+function setAuthHeader(user, pass) {
+  _authHeader = "Basic " + btoa(user + ":" + pass);
+}
+function getAuthHeader() { return _authHeader; }
+
+async function fetchEntries() {
+  const auth = getAuthHeader();
+  if (!auth) return null;
+  try {
+    const res = await fetch("/api/tracker", { headers: { Authorization: auth } });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+async function pushEntries(entries) {
+  const auth = getAuthHeader();
+  if (!auth) return;
+  try {
+    await fetch("/api/tracker", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: auth },
+      body: JSON.stringify(entries),
+    });
+  } catch {}
+}
+// ─── END SYNC ──────────────────────────────────────────────────
+
+function LoginScreen({ onLogin }) {
+  const [user, setUser] = useState("");
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState(false);
+  const [checking, setChecking] = useState(false);
+
+  const handleSubmit = async () => {
+    setChecking(true);
+    setError(false);
+    const hash = await hashCredentials(user, pass);
+    if (hash === CREDENTIAL_HASH) {
+      setSession();
+      setAuthHeader(user, pass);
+      sessionStorage.setItem("hft-creds", btoa(user + ":" + pass));
+      onLogin();
+    } else {
+      setError(true);
+    }
+    setChecking(false);
+  };
+
+  const handleKeyDown = (e) => { if (e.key === "Enter") handleSubmit(); };
+
+  return (
+    <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:"#0a0a0a", padding:24 }}>
+      <div style={{ width:320, background:"#111", border:"1px solid #1a1a1a", borderRadius:12, padding:32 }}>
+        <div style={{ fontSize:11, textTransform:"uppercase", letterSpacing:3, color:"#555", marginBottom:6 }}>HFT Prep Tracker</div>
+        <div style={{ fontSize:18, fontWeight:700, color:"#fff", marginBottom:24 }}>Sign in</div>
+
+        <div style={{ marginBottom:16 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:6, textTransform:"uppercase", letterSpacing:1 }}>Username</div>
+          <input value={user} onChange={e => setUser(e.target.value)} onKeyDown={handleKeyDown} autoFocus
+            style={{ width:"100%", background:"#0a0a0a", border:"1px solid #222", borderRadius:6, color:"#ccc", padding:"10px 12px", fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
+        </div>
+
+        <div style={{ marginBottom:20 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:6, textTransform:"uppercase", letterSpacing:1 }}>Password</div>
+          <input type="password" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={handleKeyDown}
+            style={{ width:"100%", background:"#0a0a0a", border:"1px solid #222", borderRadius:6, color:"#ccc", padding:"10px 12px", fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
+        </div>
+
+        {error && <div style={{ fontSize:11, color:"#ef4444", marginBottom:12 }}>Wrong credentials.</div>}
+
+        <button onClick={handleSubmit} disabled={checking} style={{
+          width:"100%", padding:"10px 0", borderRadius:6, border:"none", background:"#fff", color:"#000", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"inherit", letterSpacing:1, textTransform:"uppercase", opacity:checking?0.5:1
+        }}>{checking ? "..." : "Enter"}</button>
+      </div>
+    </div>
+  );
+}
+// ─── END AUTH ──────────────────────────────────────────────────
+
+const PHASES = [
+  { id:0, name:"Foundation", start:"2026-03-07", end:"2026-03-31", color:"#22c55e" },
+  { id:1, name:"Transition", start:"2026-04-01", end:"2026-04-30", color:"#3b82f6" },
+  { id:2, name:"Deep Build", start:"2026-05-01", end:"2026-06-30", color:"#8b5cf6" },
+  { id:3, name:"Steady Prep", start:"2026-07-01", end:"2026-08-31", color:"#f59e0b" },
+  { id:4, name:"Intensify", start:"2026-09-01", end:"2026-10-31", color:"#ef4444" },
+  { id:5, name:"Interview", start:"2026-11-01", end:"2026-12-31", color:"#ec4899" },
+];
+
+const PILLARS = [
+  { id:"cpp", label:"C++ Theory", emoji:"⚡", color:"#3b82f6" },
+  { id:"lc", label:"Leetcode", emoji:"🧩", color:"#22c55e" },
+  { id:"os", label:"OS / Linux", emoji:"🐧", color:"#f59e0b" },
+  { id:"net", label:"Networking", emoji:"🌐", color:"#8b5cf6" },
+  { id:"sd", label:"System Design", emoji:"🏗️", color:"#ef4444" },
+  { id:"domain", label:"Domain", emoji:"📈", color:"#ec4899" },
+  { id:"mock", label:"Mock Interview", emoji:"🎤", color:"#14b8a6" },
+];
+
+const QUOTES = [
+  "The market doesn't care about your feelings. Show up anyway.",
+  "One more rep. One more problem. One more day.",
+  "Discipline is choosing between what you want now and what you want most.",
+  "You don't rise to the level of your goals. You fall to the level of your systems.",
+  "The best time to plant a tree was 20 years ago. The second best time is now.",
+  "Hard choices, easy life. Easy choices, hard life.",
+  "Be so good they can't ignore you.",
+  "The only way to do great work is to love what you do.",
+  "Consistency beats intensity. Show up every day.",
+  "Think in decades. Act in days.",
+  "Pain is temporary. Quitting lasts forever.",
+  "You are one solve away from a breakthrough.",
+  "Small daily improvements over time lead to stunning results.",
+  "The obstacle is the way.",
+  "What you do every day matters more than what you do once in a while.",
+  "Suffer the pain of discipline or suffer the pain of regret.",
+  "Focus is saying no to a hundred good ideas.",
+  "Don't count the days. Make the days count.",
+  "The grind is the shortcut.",
+  "Brick by brick. Day by day.",
+];
+const getDailyQuote = () => {
+  const d = new Date();
+  const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+  return QUOTES[seed % QUOTES.length];
+};
+
+const STORAGE_KEY = "hft-prep-entries";
+const dateKey = d => d.toISOString().split("T")[0];
+const today = () => new Date();
+const parseDate = s => { const [y,m,d] = s.split("-"); return new Date(y, m-1, d); };
+const dayNames = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const formatShort = d => `${d.getDate()} ${monthNames[d.getMonth()]}`;
+
+const getCurrentPhase = () => {
+  const now = today();
+  for (const p of PHASES) {
+    if (now >= parseDate(p.start) && now <= parseDate(p.end)) return p;
+  }
+  return PHASES[0];
+};
+
+const getWeekDates = (baseDate) => {
+  const d = new Date(baseDate);
+  const day = d.getDay();
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - ((day + 6) % 7));
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    return date;
+  });
+};
+
+function App() {
+  const [entries, setEntries] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+  });
+  const [selectedDate, setSelectedDate] = useState(dateKey(today()));
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [view, setView] = useState("week");
+  const [editPillars, setEditPillars] = useState([]);
+  const [editHours, setEditHours] = useState("");
+  const [editNotes, setEditNotes] = useState("");
+
+  // Restore auth header from sessionStorage on page refresh
+  useEffect(() => {
+    const creds = sessionStorage.getItem("hft-creds");
+    if (creds) _authHeader = "Basic " + creds;
+  }, []);
+
+  // Sync from server on mount (server wins on conflicts)
+  useEffect(() => {
+    const creds = sessionStorage.getItem("hft-creds");
+    if (creds) _authHeader = "Basic " + creds;
+    fetchEntries().then(serverData => {
+      if (!serverData) return;
+      setEntries(prev => {
+        const merged = { ...prev, ...serverData };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        return merged;
+      });
+    });
+  }, []);
+
+  const save = useCallback(newEntries => {
+    setEntries(newEntries);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newEntries));
+    pushEntries(newEntries);
+  }, []);
+
+  useEffect(() => {
+    const entry = entries[selectedDate];
+    if (entry) {
+      setEditPillars(entry.pillars || []);
+      setEditHours(String(entry.hours || ""));
+      setEditNotes(entry.notes || "");
+    } else {
+      setEditPillars([]); setEditHours(""); setEditNotes("");
+    }
+  }, [selectedDate, entries]);
+
+  const saveEntry = () => {
+    if (!editHours && editPillars.length === 0 && !editNotes) {
+      const { [selectedDate]: _, ...rest } = entries;
+      save(rest); return;
+    }
+    save({ ...entries, [selectedDate]: { pillars: editPillars, hours: parseFloat(editHours) || 0, notes: editNotes } });
+  };
+
+  const clearEntry = () => {
+    const { [selectedDate]: _, ...rest } = entries;
+    save(rest);
+    setEditPillars([]); setEditHours(""); setEditNotes("");
+  };
+
+  const togglePillar = id => setEditPillars(prev => prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]);
+
+  const getStreak = () => {
+    let streak = 0;
+    let d = new Date(today());
+    if (!entries[dateKey(d)]) d.setDate(d.getDate() - 1);
+    while (entries[dateKey(d)]) { streak++; d.setDate(d.getDate() - 1); }
+    return streak;
+  };
+
+  const getTotalHours = () => Object.values(entries).reduce((s, e) => s + (e.hours || 0), 0);
+  const getTotalDays = () => Object.keys(entries).length;
+  const isToday = d => dateKey(d) === dateKey(today());
+  const isSelected = d => dateKey(d) === selectedDate;
+  const isFuture = d => d > today();
+
+  const weekDates = getWeekDates((() => { const d = today(); d.setDate(d.getDate() + weekOffset * 7); return d; })());
+
+  const getHeatmapMonths = () => {
+    const months = [];
+    const start = parseDate("2026-03-01");
+    const end = parseDate("2026-12-31");
+    let current = new Date(start);
+    while (current <= end) {
+      const year = current.getFullYear();
+      const month = current.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const days = [];
+      for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(year, month, d);
+        days.push({ date, key: dateKey(date) });
+      }
+      months.push({ name: monthNames[month], days });
+      current = new Date(year, month + 1, 1);
+    }
+    return months;
+  };
+
+  const phase = getCurrentPhase();
+  const streak = getStreak();
+
+  const exportData = () => {
+    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `hft-prep-backup-${dateKey(today())}.json`;
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  const importData = () => {
+    const input = document.createElement("input");
+    input.type = "file"; input.accept = ".json";
+    input.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          save(data);
+        } catch { alert("Invalid JSON file"); }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+  // Weekly summary for the current week
+  const weekHours = weekDates.reduce((s, d) => s + (entries[dateKey(d)]?.hours || 0), 0);
+  const weekDaysLogged = weekDates.filter(d => entries[dateKey(d)]).length;
+
+  return (
+    <div style={{ minHeight:"100vh", padding:"24px", maxWidth:720, margin:"0 auto" }}>
+
+      {/* Greeting */}
+      <div style={{ marginBottom:20 }}>
+        <div style={{ fontSize:16, fontWeight:600, color:"#fff" }}>Hey Kailash</div>
+        <div style={{ fontSize:11, color:"#555", marginTop:4, fontStyle:"italic" }}>{getDailyQuote()}</div>
+      </div>
+
+      {/* Header */}
+      <div style={{ marginBottom:32 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+          <div>
+            <div style={{ fontSize:11, textTransform:"uppercase", letterSpacing:3, color:"#555", marginBottom:6 }}>HFT Prep Tracker</div>
+            <div style={{ fontSize:22, fontWeight:700, color:"#fff", letterSpacing:-0.5 }}>Phase {phase.id}: {phase.name}</div>
+          </div>
+          <div style={{ display:"flex", gap:6 }}>
+            <button onClick={exportData} style={{ fontSize:10, color:"#555", background:"none", border:"1px solid #222", borderRadius:4, padding:"4px 8px" }} title="Export backup">↓ Export</button>
+            <button onClick={importData} style={{ fontSize:10, color:"#555", background:"none", border:"1px solid #222", borderRadius:4, padding:"4px 8px" }} title="Import backup">↑ Import</button>
+            <button onClick={() => { clearSession(); window.location.reload(); }} style={{ fontSize:10, color:"#ef4444", background:"none", border:"1px solid #ef444433", borderRadius:4, padding:"4px 8px" }} title="Log out">Logout</button>
+          </div>
+        </div>
+        <div style={{ height:3, background:"#1a1a1a", borderRadius:2, marginTop:12, overflow:"hidden" }}>
+          <div style={{ height:"100%", background:phase.color, width:`${Math.min(100,((today()-parseDate(phase.start))/(parseDate(phase.end)-parseDate(phase.start)))*100)}%`, borderRadius:2, transition:"width 0.3s" }} />
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display:"flex", gap:12, marginBottom:28 }}>
+        {[
+          { label:"Streak", value:`${streak}d`, color: streak >= 7 ? "#22c55e" : streak >= 3 ? "#f59e0b" : "#ef4444" },
+          { label:"Total Hours", value:getTotalHours().toFixed(1), color:"#3b82f6" },
+          { label:"Days Logged", value:getTotalDays(), color:"#8b5cf6" },
+          { label:"This Week", value:`${weekHours.toFixed(1)}h / ${weekDaysLogged}d`, color:"#14b8a6" },
+        ].map(s => (
+          <div key={s.label} style={{ flex:1, background:"#111", border:"1px solid #1a1a1a", borderRadius:8, padding:"14px 12px", textAlign:"center" }}>
+            <div style={{ fontSize:18, fontWeight:700, color:s.color }}>{s.value}</div>
+            <div style={{ fontSize:9, color:"#666", marginTop:4, textTransform:"uppercase", letterSpacing:1 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* View toggle */}
+      <div style={{ display:"flex", gap:0, marginBottom:20, background:"#111", borderRadius:6, overflow:"hidden", border:"1px solid #1a1a1a" }}>
+        {["week","heatmap"].map(v => (
+          <button key={v} onClick={() => setView(v)} style={{ flex:1, padding:"8px 0", fontSize:11, textTransform:"uppercase", letterSpacing:2, background:view===v?"#1a1a1a":"transparent", color:view===v?"#fff":"#555", border:"none", transition:"all 0.2s" }}>{v}</button>
+        ))}
+      </div>
+
+      {/* Week view */}
+      {view === "week" && (
+        <>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
+            <button onClick={() => setWeekOffset(w => w-1)} style={{ background:"none", border:"1px solid #222", borderRadius:4, color:"#888", padding:"4px 10px", fontSize:13 }}>←</button>
+            <div style={{ textAlign:"center" }}>
+              <span style={{ fontSize:12, color:"#888" }}>{formatShort(weekDates[0])} — {formatShort(weekDates[6])}</span>
+              {weekOffset !== 0 && <button onClick={() => setWeekOffset(0)} style={{ marginLeft:8, fontSize:10, color:"#555", background:"none", border:"1px solid #222", borderRadius:4, padding:"2px 6px" }}>Today</button>}
+            </div>
+            <button onClick={() => setWeekOffset(w => w+1)} style={{ background:"none", border:"1px solid #222", borderRadius:4, color:"#888", padding:"4px 10px", fontSize:13 }}>→</button>
+          </div>
+
+          <div style={{ display:"flex", gap:6, marginBottom:24 }}>
+            {weekDates.map((d, i) => {
+              const key = dateKey(d);
+              const entry = entries[key];
+              const hrs = entry?.hours || 0;
+              const filled = !!entry;
+              return (
+                <button key={key} onClick={() => { if (!isFuture(d)) setSelectedDate(key); }} style={{
+                  flex:1, padding:"10px 4px", borderRadius:8, border:isSelected(d)?"1.5px solid #fff":"1px solid #1a1a1a",
+                  background:filled?`${phase.color}18`:"#111", opacity:isFuture(d)?0.3:1, transition:"all 0.15s"
+                }}>
+                  <div style={{ fontSize:10, color:"#666", marginBottom:4 }}>{dayNames[i]}</div>
+                  <div style={{ fontSize:14, fontWeight:isToday(d)?700:400, color:isToday(d)?"#fff":"#aaa" }}>{d.getDate()}</div>
+                  {filled && (
+                    <div style={{ marginTop:6, display:"flex", justifyContent:"center", gap:2, flexWrap:"wrap" }}>
+                      {(entry.pillars||[]).map(p => {
+                        const pillar = PILLARS.find(x => x.id === p);
+                        return <span key={p} title={pillar?.label} style={{ width:6, height:6, borderRadius:"50%", background:pillar?.color||"#555", display:"inline-block" }} />;
+                      })}
+                    </div>
+                  )}
+                  {filled && <div style={{ fontSize:10, color:phase.color, marginTop:4 }}>{hrs}h</div>}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {/* Heatmap view */}
+      {view === "heatmap" && (
+        <div style={{ marginBottom:24 }}>
+          {getHeatmapMonths().map(month => (
+            <div key={month.name} style={{ marginBottom:12 }}>
+              <div style={{ fontSize:10, color:"#666", marginBottom:4, textTransform:"uppercase", letterSpacing:1 }}>{month.name}</div>
+              <div style={{ display:"flex", flexWrap:"wrap", gap:3 }}>
+                {month.days.map(({ date, key }) => {
+                  const entry = entries[key];
+                  const hrs = entry?.hours || 0;
+                  const opacity = hrs === 0 ? 0.08 : Math.min(1, 0.25 + (hrs/4)*0.75);
+                  return (
+                    <div key={key} onClick={() => { if(!isFuture(date)){ setSelectedDate(key); setView("week"); const diff=Math.round((date-today())/(7*86400000)); setWeekOffset(diff>=0?Math.floor(diff):Math.ceil(diff)); }}}
+                      title={`${key}: ${hrs}h`}
+                      style={{ width:16, height:16, borderRadius:3, background:phase.color, opacity, cursor:isFuture(date)?"default":"pointer", transition:"opacity 0.2s" }} />
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Entry editor */}
+      <div style={{ background:"#111", border:"1px solid #1a1a1a", borderRadius:10, padding:20, marginBottom:20 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
+          <div>
+            <div style={{ fontSize:13, fontWeight:600, color:"#fff" }}>{selectedDate === dateKey(today()) ? "Today" : selectedDate}</div>
+            <div style={{ fontSize:10, color:"#555", marginTop:2 }}>{entries[selectedDate] ? "Edit entry" : "Log your study"}</div>
+          </div>
+          {entries[selectedDate] && (
+            <button onClick={clearEntry} style={{ fontSize:10, color:"#ef4444", background:"none", border:"1px solid #ef444433", borderRadius:4, padding:"3px 8px" }}>Clear</button>
+          )}
+        </div>
+
+        <div style={{ marginBottom:16 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:8, textTransform:"uppercase", letterSpacing:1 }}>What did you work on?</div>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+            {PILLARS.map(p => (
+              <button key={p.id} onClick={() => togglePillar(p.id)} style={{
+                padding:"6px 12px", borderRadius:6, fontSize:11, transition:"all 0.15s",
+                background:editPillars.includes(p.id)?`${p.color}22`:"transparent",
+                border:editPillars.includes(p.id)?`1px solid ${p.color}66`:"1px solid #222",
+                color:editPillars.includes(p.id)?p.color:"#666",
+              }}>{p.emoji} {p.label}</button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom:16 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:8, textTransform:"uppercase", letterSpacing:1 }}>Hours</div>
+          <div style={{ display:"flex", gap:6 }}>
+            {[0.5,1,1.5,2,2.5,3,4].map(h => (
+              <button key={h} onClick={() => setEditHours(String(h))} style={{
+                padding:"6px 10px", borderRadius:6, fontSize:12,
+                background:editHours===String(h)?"#fff":"transparent",
+                color:editHours===String(h)?"#000":"#666",
+                border:editHours===String(h)?"1px solid #fff":"1px solid #222",
+                transition:"all 0.15s"
+              }}>{h}</button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom:16 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:8, textTransform:"uppercase", letterSpacing:1 }}>Notes</div>
+          <textarea value={editNotes} onChange={e => setEditNotes(e.target.value)} placeholder="EMC++ items 13-15, 2 LC mediums (binary search)..." rows={2}
+            style={{ width:"100%", background:"#0a0a0a", border:"1px solid #222", borderRadius:6, color:"#ccc", padding:"8px 10px", fontSize:12, resize:"vertical", outline:"none" }} />
+        </div>
+
+        <button onClick={saveEntry} style={{
+          width:"100%", padding:"10px 0", borderRadius:6, border:"none", background:"#fff", color:"#000", fontSize:12, fontWeight:600, letterSpacing:1, textTransform:"uppercase", transition:"opacity 0.15s"
+        }}>Save</button>
+      </div>
+
+      {/* Pillar distribution */}
+      {getTotalDays() > 0 && (
+        <div style={{ background:"#111", border:"1px solid #1a1a1a", borderRadius:10, padding:20, marginBottom:20 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>Pillar Distribution</div>
+          {PILLARS.map(p => {
+            const count = Object.values(entries).filter(e => (e.pillars||[]).includes(p.id)).length;
+            const pct = (count / getTotalDays()) * 100;
+            return (
+              <div key={p.id} style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                <div style={{ width:90, fontSize:10, color:"#888" }}>{p.emoji} {p.label}</div>
+                <div style={{ flex:1, height:6, background:"#1a1a1a", borderRadius:3, overflow:"hidden" }}>
+                  <div style={{ height:"100%", background:p.color, width:`${pct}%`, borderRadius:3, transition:"width 0.3s" }} />
+                </div>
+                <div style={{ width:30, fontSize:10, color:"#666", textAlign:"right" }}>{count}d</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Recent entries log */}
+      {getTotalDays() > 0 && (
+        <div style={{ background:"#111", border:"1px solid #1a1a1a", borderRadius:10, padding:20 }}>
+          <div style={{ fontSize:10, color:"#555", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>Recent Log</div>
+          {Object.keys(entries).sort().reverse().slice(0, 7).map(key => {
+            const e = entries[key];
+            return (
+              <div key={key} onClick={() => { setSelectedDate(key); setView("week"); }} style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 0", borderBottom:"1px solid #1a1a1a", cursor:"pointer" }}>
+                <div style={{ width:70, fontSize:11, color:"#888" }}>{key.slice(5)}</div>
+                <div style={{ display:"flex", gap:3 }}>
+                  {(e.pillars||[]).map(p => {
+                    const pillar = PILLARS.find(x => x.id === p);
+                    return <span key={p} style={{ fontSize:10, color:pillar?.color, background:`${pillar?.color}18`, padding:"1px 5px", borderRadius:3 }}>{pillar?.label}</span>;
+                  })}
+                </div>
+                <div style={{ marginLeft:"auto", fontSize:11, color:"#666" }}>{e.hours}h</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <div style={{ marginTop:24, fontSize:10, color:"#333", textAlign:"center", paddingBottom:24 }}>Don't break the chain.</div>
+    </div>
+  );
+}
+
+function Root() {
+  const [authed, setAuthed] = useState(getSession());
+  if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
+  return <App />;
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<Root />);
+</script>
+</body>
+</html>
