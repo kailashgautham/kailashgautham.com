@@ -93,7 +93,7 @@ function LoginScreen({ onLogin }) {
     if (hash === CREDENTIAL_HASH) {
       setSession();
       setAuthHeader(user, pass);
-      sessionStorage.setItem("hft-creds", btoa(user + ":" + pass));
+      localStorage.setItem("hft-creds", btoa(user + ":" + pass));
       onLogin();
     } else {
       setError(true);
@@ -220,13 +220,13 @@ function App() {
 
   // Restore auth header from sessionStorage on page refresh
   useEffect(() => {
-    const creds = sessionStorage.getItem("hft-creds");
+    const creds = localStorage.getItem("hft-creds");
     if (creds) _authHeader = "Basic " + creds;
   }, []);
 
   // Sync from server on mount (server wins on conflicts)
   useEffect(() => {
-    const creds = sessionStorage.getItem("hft-creds");
+    const creds = localStorage.getItem("hft-creds");
     if (creds) _authHeader = "Basic " + creds;
     fetchEntries().then(serverData => {
       if (!serverData) return;
