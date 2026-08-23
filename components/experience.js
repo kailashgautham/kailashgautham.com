@@ -2,7 +2,7 @@ const Experience = ({ experience }) => {
     const { companyName, role, duration, description, technologies } = experience;
 
     return (
-        <div>
+        <div className="experienceCard">
             <h3>{companyName}</h3>
             <p style={{color: "#808080"}}>{role} | {duration}</p>
             <p>{description}</p>

@@ -3,10 +3,20 @@ import Experience from './experience';
 const EXPERIENCE_ITEMS = [
   {
     companyName: "Squarepoint Capital",
-    role: "C++ Software Engineer Intern",
-    duration: "August 2025 - January 2026",
-    description: "Worked under the Risk PnL team. Finally used C++. Loved the challenge.",
-    technologies: "C++"
+    roles: [
+      {
+        role: "Graduate C++ Software Engineer",
+        duration: "July 2026 - Present",
+        description: "Working under the Risk PnL team as a full-time C++ Software Engineer.",
+        technologies: "C++"
+      },
+      {
+        role: "C++ Software Engineer Intern",
+        duration: "August 2025 - June 2026",
+        description: "Worked under the Risk PnL team. Finally used C++. Loved the challenge.",
+        technologies: "C++"
+      }
+    ]
   },
   {
     companyName: "Goldman Sachs",
@@ -23,7 +33,7 @@ const EXPERIENCE_ITEMS = [
     technologies: "Python, C++, Java"
   },
   {
-    companyName: "AI Centre for Education Technologies (AICET)",
+    companyName: "AI Centre for Education Technologies",
     role: "Software Engineer Intern",
     duration: "May 2024 - August 2024",
     description: "Worked on AICET's Koditsu project, a high-performance code assessment platform that can support over 800 concurrent users.",
@@ -59,6 +69,19 @@ const EXPERIENCE_ITEMS = [
   },
 ]
 
+const GroupedExperience = ({ companyName, roles }) => (
+  <div className="experienceCard">
+    <h3>{companyName}</h3>
+    {roles.map((roleItem, i) => (
+      <div key={i} style={{ marginTop: "0.75rem" }}>
+        <p style={{ color: "#808080" }}>{roleItem.role} | {roleItem.duration}</p>
+        <p>{roleItem.description}</p>
+        <p><b>Technologies</b>: {roleItem.technologies}</p>
+      </div>
+    ))}
+  </div>
+);
+
 const ExperienceParent = () => {
   return (
     <div style={{ maxWidth: "100%", overflow: "hidden" }}>
@@ -66,11 +89,12 @@ const ExperienceParent = () => {
         marginTop: 0,
         marginBottom: "1rem"
       }}>Work Experience</h1>
-      {EXPERIENCE_ITEMS.map((experience) => (
-        <div style={{ paddingBottom: "1.5rem" }}>
-          <Experience
-            experience={experience}
-          />
+      {EXPERIENCE_ITEMS.map((item, i) => (
+        <div key={i} style={{ paddingBottom: "1.5rem" }}>
+          {item.roles
+            ? <GroupedExperience companyName={item.companyName} roles={item.roles} />
+            : <Experience experience={item} />
+          }
         </div>
       ))}
     </div>

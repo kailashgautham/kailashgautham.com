@@ -39,29 +39,18 @@ const Sidenav = () => {
                 }}
             />
             <div style={{ paddingTop: isSmallScreen ? 16 : 0 }}>
-                <Link href={"/"} >
+                <Link href={"/"} className="siteTitle">
                     Kailash Gautham
                 </Link>
             </div>
-            Welcome to my website :)
-            <br></br>
+            <span style={{ color: "#808080", fontSize: "0.9rem" }}>Software Engineer</span>
             <ThemeToggle />
             <nav>
-                <div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div>
-                    {MENU_LIST.map((menu, _) => (
-                        <div
-                            key={menu.text}
-                            style={{ width: "auto" }}
-                        >
-                            <Link href={menu.href}>
-                                {...menu.text}
-                            </Link>
-                        </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                    {MENU_LIST.map((menu) => (
+                        <Link key={menu.text} href={menu.href} className="navLink">
+                            {menu.text}
+                        </Link>
                     ))}
                 </div>
             </nav>

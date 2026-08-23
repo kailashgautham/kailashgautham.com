@@ -10,9 +10,10 @@ const Home = () => {
             <div style={{ paddingBottom: "1.5rem" }}>
                 <Stack style={{ textAlign: "justify" }} spacing={3}>
                     <Typography >
-                        Hi, I’m Kailash, a final-year undergraduate computer science student at the National University of Singapore, expecting to graduate by May 2026.
+                        Hi, I’m Kailash, a <b>C++ Software Engineer</b> at <b>Squarepoint Capital</b>, where I work on the <b>Risk PnL</b> team.
+                        I recently graduated from the <b>National University of Singapore</b> with a degree in Computer Science.
                         While I am broadly interested in computer science, my primary focus is on <b>C++</b> and <b>low-level, high-performance systems development</b>.
-                        I am also extremely passionate about <b>operating systems</b> and <b>parallel computing</b>, which are my areas of focus at NUS.
+                        I am also extremely passionate about <b>operating systems</b> and <b>parallel computing</b>, which were my areas of focus at NUS.
                     </Typography>
                     <Typography>
                         In the past, I have completed a number of software engineering internships at various companies. Apart from internships, I have worked on many technically challenging projects, including <a target="_blank" href="https://github.com/kaithanos/kaithanos">KaithanOS</a> (an operating system built from scratch) and <a target="_blank" href="https://github.com/janniver/interviewace">InterviewAce</a> (your very own AI technical interviewer). This website is a comprehensive portal about me, my projects, and my interests.
@@ -27,15 +28,15 @@ const Home = () => {
                         I am also an avid reader and enjoy reading books on technology and science fiction. I also drink too much coffee for my own good.
                     </Typography>
                     <Typography>
-                        This past summer, I interned at <b>Goldman Sachs</b> as a <b>Software Engineer</b> on the <b>Margin Engineering</b> team,
-                        where I built a cool trend analysis platform that helps stakeholders understand the scale of margin operations.
+                        Previously, I interned at <b>Goldman Sachs</b> as a <b>Software Engineer</b> on the <b>Margin Engineering</b> team,
+                        where I built a trend analysis platform that helps stakeholders understand the scale of margin operations.
                     </Typography>
                     <Typography>
-                        I also interned at <b>Squarepoint Capital</b> this fall as a <b>C++ Software Engineer</b> under the <b>Risk PnL</b> team. 
-                        Among other things, I worked on auto-marking logic in C++ to handle missing prices more efficiently and ensure accurate PnL reporting.
+                        I also interned at <b>Squarepoint Capital</b> as a <b>C++ Software Engineer</b> under the <b>Risk PnL</b> team,
+                        where I worked on auto-marking logic in C++ to handle missing prices more efficiently and ensure accurate PnL reporting.
                     </Typography>
                     <Typography>
-                        I have received return offers from all of my previous internships, and I'm excited to share that I'll be returning to <b>Squarepoint Capital</b> this July as a <b>Graduate C++ Software Engineer</b>.
+                        I received return offers from all of my previous internships, and I am currently at <b>Squarepoint Capital</b> as a <b>Graduate C++ Software Engineer</b> on the <b>Risk PnL</b> team.
                     </Typography>
                     <Typography>
                         If you're interested in learning more about my work or discussing potential opportunities, please <Link href="/contact">contact me here</Link>.

@@ -125,6 +125,61 @@ img {
   }
 }
 
+/* Heading hierarchy — h2/h3 were same size as body text */
+h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Sidenav name */
+.siteTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.siteTitle:hover {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* Sidenav nav links */
+.navLink {
+  display: block;
+  padding: 0.2rem 0;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.navLink:hover {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+/* Experience card — left accent line */
+.experienceCard {
+  padding-left: 0.875rem;
+  border-left: 2px solid #0070f3;
+}
+
+/* Project card — bottom separator */
+.projectCard {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(150, 150, 150, 0.2);
+}
+
+.projectCard:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .MuiTypography-root {
   font-family: inherit !important;
   font-size: inherit !important;
